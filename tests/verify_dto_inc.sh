@@ -29,11 +29,11 @@ TEMP_DIR=`mktemp -d`
 set -e
 trap on_exit EXIT
 
-# Finds '/dts-v1/ /plugin/;' and replace to '/* REMOVED */'
+# Finds '/dts-v1/; and /plugin/;' then replace them with '/* REMOVED */'
 OVERLAY_DTS_DIR=`dirname "$OVERLAY_DTS"`
 OVERLAY_DTS_NAME=`basename "$OVERLAY_DTS"`
 OVERLAY_DT_WO_HEADER_DTS="$TEMP_DIR/$OVERLAY_DTS_NAME"
-sed "s/^\\s*\\/dts-v1\\/\s*\\/plugin\\/\\s*;/\\/\\* REMOVED \\*\\//g" \
+sed "s/\\(\\/dts-v1\\/\\s*;\\|\\/plugin\\/\\s*;\\)/\\/\\* REMOVED \\*\\//g" \
   "$OVERLAY_DTS" > "$OVERLAY_DT_WO_HEADER_DTS"
 
 # Appends /include/ ...;
@@ -45,7 +45,7 @@ echo "/include/ \"$OVERLAY_DT_WO_HEADER_DTS\"" >> "$BASE_DT_WITH_INC_DTS"
 
 # Simulate device tree overlay
 MERGED_DTB="$BASE_DT_WITH_INC_DTS.dtb"
-dtc -@ -s -i "$BASE_DTS_DIR" -i "$OVERLAY_DTS_DIR" -O dtb -o "$MERGED_DTB" "$BASE_DT_WITH_INC_DTS"
+dtc -@ -i "$BASE_DTS_DIR" -i "$OVERLAY_DTS_DIR" -O dtb -o "$MERGED_DTB" "$BASE_DT_WITH_INC_DTS"
 
 # Dump
 dtc -s -O dts -o "$OUT_DTS" "$MERGED_DTB"
