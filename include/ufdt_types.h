@@ -1,25 +1,28 @@
+/*
+ * Copyright (C) 2016 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #ifndef UFDT_TYPES_H
 #define UFDT_TYPES_H
 
 #include <libfdt.h>
 
-#define ASCII_PRINT_S (32)
-#define ASCII_PRINT_E (128)
-#define ASCII_PRINT_SZ (ASCII_PRINT_E - ASCII_PRINT_S)
-
-#define FDT_PROP_DELI ':'
-#define FDT_NODE_DELI '/'
-
-#define DTNL_INIT_SZ 4
-
-/* Empirical values for hash functions. */
-#define HASH_BASE 13131
-
 /* it has type : struct ufdt_node** */
-#define for_each(it, node_dict)                                  \
-  if ((node_dict) != NULL)                                       \
-    for (it = (node_dict)->nodes;                                \
-         it != (node_dict)->nodes + (node_dict)->mem_size; ++it) \
+#define for_each(it, node)                                                 \
+  if ((node) != NULL)                                                      \
+    for (it = (node)->nodes; it != (node)->nodes + (node)->mem_size; ++it) \
       if (*it)
 
 #define for_each_child(it, node)                                    \
@@ -49,12 +52,6 @@ struct ufdt_node {
   struct ufdt_node *sibling;
 };
 
-struct ufdt_node_dict {
-  int mem_size;
-  int num_used;
-  struct ufdt_node **nodes;
-};
-
 struct fdt_prop_ufdt_node {
   struct ufdt_node parent;
   const char *name;
@@ -77,7 +74,10 @@ struct static_phandle_table {
 };
 
 struct ufdt {
-  void *fdtp;
+  void **fdtps;
+  int mem_size_fdtps;
+  int num_used_fdtps;
+
   struct ufdt_node *root;
   struct static_phandle_table phandle_table;
 };
