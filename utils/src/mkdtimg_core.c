@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include "mkdtimg_core.h"
 
 #include <stdio.h>
@@ -125,7 +141,7 @@ static fdt32_t get_fdt32_from_prop(void *fdt, const char *path, const char *prop
     return 0;
   }
 
-  fdt32_t value = fdt32_to_cpu(*prop_value_ptr);
+  fdt32_t value = *prop_value_ptr;
   /* TODO: check len */
   if (DEBUG) printf("%s:%s => %08x\n", path, prop, fdt32_to_cpu(value));
 
