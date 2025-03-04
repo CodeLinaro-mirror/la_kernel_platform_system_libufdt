@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef DTO_DISABLE_DEFAULT_POSIX_LIBC_PRINT
 int dto_print(const char *fmt, ...) {
   int err;
 
@@ -32,7 +31,6 @@ int dto_print(const char *fmt, ...) {
 
   return err;
 }
-#endif
 
 void dto_qsort(void *base, size_t nmemb, size_t size,
                int (*compar)(const void *, const void *)) {
